@@ -1,0 +1,25 @@
+{
+  "name": "urban-jungle",
+  "version": "1.0.0",
+  "description": "\"a Jungle-Plants eStore\"",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "app": "npm install && cd ../client && npm install && npm run build && cd .. && node index.js",
+    "test": " \"echo \\\"Error: no test specified\\\" && exit 1\""
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MayBinNun/urban-jungle.git"
+  },
+  "author": "May Bin Nun",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MayBinNun/urban-jungle/issues"
+  },
+  "homepage": "https://github.com/MayBinNun/urban-jungle#readme"
+}
