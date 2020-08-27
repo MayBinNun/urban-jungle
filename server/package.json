@@ -4,13 +4,15 @@
   "description": "\"a Jungle-Plants eStore\"",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon index.js",
     "app": "npm install && cd ../client && npm install && npm run build && cd .. && node index.js",
     "test": " \"echo \\\"Error: no test specified\\\" && exit 1\""
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.4"
+    "express": "^4.17.1",
+    "node-fetch": "^2.6.0",
+    "redis": "^3.0.2"
   },
   "repository": {
     "type": "git",
@@ -21,5 +23,10 @@
   "bugs": {
     "url": "https://github.com/MayBinNun/urban-jungle/issues"
   },
-  "homepage": "https://github.com/MayBinNun/urban-jungle#readme"
+  "homepage": "https://github.com/MayBinNun/urban-jungle#readme",
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.4"
+  },
+  "keywords": []
 }
