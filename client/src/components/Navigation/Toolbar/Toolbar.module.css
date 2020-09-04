@@ -8,5 +8,15 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    height: 40px;
     box-sizing: border-box;
+}
+
+.NavList{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
