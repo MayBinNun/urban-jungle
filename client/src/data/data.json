@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "url": "https://cdn11.bigcommerce.com/s-oqm1pc/images/stencil/360x360/products/1158/8243/sea_of_pearls__64146.1555712278.jpg?c=2",
+    "price": 10,
+    "name":"succulent",
+    "description":"lots of sun, lots of love"
+  },
+  {
+    "id": 2,
+    "url": "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1568042845-Cactus_mix_yellow_2048x.jpg?crop=0.838xw:0.838xh;0.0705xw,0.122xh",
+    "price": 10,
+    "name":"Cactus",
+    "description":"lots of sun, lots of love"
+  }
+]

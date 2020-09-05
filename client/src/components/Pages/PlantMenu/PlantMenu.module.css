@@ -1,0 +1,7 @@
+.PlantItemList{
+    margin-top: 70px;
+    margin-left: 15px;
+    list-style: none;
+    display: flex;
+    position: fixed;
+}

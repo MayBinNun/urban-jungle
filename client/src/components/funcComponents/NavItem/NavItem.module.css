@@ -13,8 +13,10 @@
     padding: 16px 10px;
     border-bottom: 4px solid transparent;
     box-sizing: border-box;
-    display: block;
+    display: flex;
+    align-items: center;
 }
+
 
 .NavItem a:hover,
 .NavItem a:active,
