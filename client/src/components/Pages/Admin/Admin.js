@@ -5,6 +5,7 @@ import { Container } from "react-bootstrap";
 import classes from "../PlantMenu/PlantMenu.module.css";
 import UserData from '../../funcComponents/Cards/UserCard';
 import PlantItem from "../../funcComponents/Cards/PlantItem";
+import {cards} from "../../../data/data-export";
 
 class Admin extends Component {
     state = {
@@ -26,8 +27,9 @@ class Admin extends Component {
             this.setState({json: json});
         }*/
 
-            const json = (await getAdminData("", true)).data;
+            const json = (await getAdminData("Admin", true)).data;
             this.setState({cards: json});
+            console.log(cards);
 
     }
 

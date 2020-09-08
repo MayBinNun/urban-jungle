@@ -118,8 +118,8 @@ app.get('/api/user/auth', async (req, res) => {
 //Admin get all database
 app.get('/api/admin/data/:email', async (req, res) => {
     try {
-        if (req.params.email === 'admin') {
-            const data = await getRedisData("data");
+        if (req.params.email === 'Admin') {
+            let data = JSON.parse(client.hgetall('users'));
             res.status(200).send({msg: 'Admin data', data: data});
         } else {
             res.status(500).send({msg: 'User can\'t get this data...'});
@@ -139,15 +139,19 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
         client.hget('users', email, (err, data) => {
             if (err) res.redirect('/');
             else if (data != null) {
-                if (Object.values(JSON.parse(data))[0] == password) {
+                var obj = JSON.parse(data);
+                console.log(obj.password);
+                if (obj.password === password) {
+                    console.log("true");
                     const token = jwt.sign({email}, SECRET);
                     res.cookie('token_mama', token, {maxAge: maxAge});
                     res.status(200).send({msg: `The user ${email}, logged in succesfully...`});
+                    console.log("true");
                 } else {
-                    res.status(500).send({msg: `wrong password`});
+                    res.status(500).send({msg: `Wrong password`});
                 }
             } else {
-                res.status(500).send({msg: `wrong email adress`});
+                res.status(500).send({msg: `Wrong email adress`});
             }
         });
     } catch (e) {
@@ -264,6 +268,7 @@ app.get('/api/gallery', async (req, res) => {
 });
 
 //Serves react client static files
+/*
 app.get('*', (req, res) => {
     try {
         res.sendFile(path.join(__dirname, 'client/build/index.html'));
@@ -271,6 +276,7 @@ app.get('*', (req, res) => {
         res.status(500).send({msg: e.message});
     }
 });
+*/
 
 //Private functions
 function capitalize(str) {
