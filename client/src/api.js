@@ -11,6 +11,7 @@ export async function postSignup(data) {
     const json = await res.json();
     if (res.status === 200) {
         return json;
+        alert("json sent");
     } else {
         alert(json.msg)
     }
