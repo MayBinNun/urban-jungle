@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { getAdminData } from "../../../api";
 import { Container } from "react-bootstrap";
-import classes from "../PlantMenu/PlantMenu.module.css";
+import classes from "./Admin.module.css";
 import UserData from '../../funcComponents/Cards/UserCard';
 import PlantItem from "../../funcComponents/Cards/PlantItem";
 
@@ -39,12 +39,11 @@ class Admin extends Component {
         }*/
 
         return (
-
-            <Container className='pb-4' style={{background: 'dark'}}>
+            <div className={classes.Admin}>
                 <div>
                     {this.state.cards?.map(item => <UserData item={item}/>)}
                 </div>
-            </Container>
+            </div>
         )
     }
 }

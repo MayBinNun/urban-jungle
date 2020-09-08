@@ -37,6 +37,7 @@ class Login extends Component{
     };
 
     handleSubmit = async (e) => {
+
         e.preventDefault();
         let res = await getSignin(this.state.email.toLowerCase(), this.state.password, this.state.remember);
     };
