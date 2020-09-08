@@ -1,18 +1,19 @@
 import React, {Component} from 'react';
-import CustomParallax from "../components/CustomParallax";
-import home_top from "../assets/home_top.jpg";
+import classes from "./Checkout.module.css";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import CartTotalsCheckout from "../components/CartTotalsCheckout";
 import {Link} from "react-router-dom";
+import cartSomeUp from "../../funcComponents/Cart/CartSomeUp";
 import {connect} from "react-redux";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+/*
 import {postNewOrder} from "../utils/api";
 import {Set, Reset} from "../redux/actions/cartActions";
 import {round} from "../utils/functions";
+*/
 
 class Checkout extends Component {
     state = {
@@ -47,7 +48,7 @@ class Checkout extends Component {
 
         const checkout = <Row>
             <Col xs={12} lg={8}>
-                <h4 className='text-uppercase mr-2 my-auto'>My Cart</h4>
+                <h4 className='text-uppercase mr-2 my-auto' color='green'>My Details</h4>
 
                 <Card className='mt-3'>
                     <Card.Header>EMAIL ADDRESS</Card.Header>
@@ -149,7 +150,7 @@ class Checkout extends Component {
             </Col>
 
             <Col className='ml-lg-5 pl-lg-2 mt-4 mt-lg-0' xs={12} lg={3}>
-                <CartTotalsCheckout handleNewOrder={this.handleNewOrder} disabled={this.validateForm()} buttonText='Place Order'
+                <cartSomeUp handleNewOrder={this.handleNewOrder} disabled={this.validateForm()} buttonText='Place Order'
                               /*      total={this.props.total}
                                     totalPrice={round(this.props.totalPrice)}*/
                                     total='1'
@@ -171,15 +172,18 @@ class Checkout extends Component {
             </div>;
 
         return (
+            <div className={classes.Checkout}>
             <React.Fragment>
-                <CustomParallax title='Checkout' img={home_top} height={300}/>
+               {/* <CustomParallax title='Checkout' img={home_top} height={300}/>*/}
                 <Container className='my-auto Checkout'>
                     {/*this.props.loggedIn*/ true ? checkout : needToLogin}
                 </Container>
             </React.Fragment>
+            </div>
         );
     }
 }
+
 
 /*const mapStateToProps = (state) => {
     return {

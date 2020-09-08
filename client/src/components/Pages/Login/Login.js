@@ -6,6 +6,8 @@ import Col from "react-bootstrap/Col";
 import {Link} from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
+import {getSignin} from "../../../api";
+
 
 /*import {userLogin} from "../redux/actions/userActions";
 import {getLogin} from "../utils/api";
@@ -19,16 +21,24 @@ class Login extends Component{
     };
 
     validateForm() {
-        return true;
+        return false;
+        // TODO: VALIDATE
+        //   return !(this.state.email.length > 0 && this.state.password.length > 0);
     }
 
     handleChange = e => {
+        this.setState({[e.target.id]: e.target.value});
     };
 
     handleCheckbox = e => {
+        this.setState({
+            remember: e.target.checked
+        });
     };
 
     handleSubmit = async (e) => {
+        e.preventDefault();
+        let res = await getSignin(this.state.email.toLowerCase(), this.state.password, this.state.remember);
     };
 
     setItemsNum(items) {
