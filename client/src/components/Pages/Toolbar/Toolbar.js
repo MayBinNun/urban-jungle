@@ -15,8 +15,8 @@ class Toolbar extends Component {
                 <NavItem link ="/" >Contact Us</NavItem>
                 <NavItem link ="/">Contact Us</NavItem>
             </ul>
-
             <NavItem link ="/Login" >Login/Logout</NavItem>
+            <NavItem link ="/Signup" >Signup</NavItem>
 
         </header>);
     }

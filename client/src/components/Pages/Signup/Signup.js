@@ -4,9 +4,10 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
-import {userSignup} from "../redux/actions/userActions";
-import {connect} from "react-redux";
-import {postSignup} from "../utils/api";
+import {postSignup} from "../../../api"
+/*import {userSignup} from "../redux/actions/userActions";
+import {connect} from "react-redux";*/
+
 
 class Signup extends Component {
     state = {
@@ -36,12 +37,13 @@ class Signup extends Component {
     };
 
     handleSubmit = async (event) => {
+        //   this.props.userSignup(this.state);
+        alert('done');
         event.preventDefault();
         await this.setState({email: this.state.email.toLowerCase()});
         let res = await postSignup(this.state);
         if (res) {
-            this.props.userSignup(this.state);
-            this.props.history.push('');
+            // this.props.history.push('');
         }
     };
 
@@ -123,6 +125,9 @@ class Signup extends Component {
     }
 }
 
+export default Signup;
+
+/*
 const mapDispatchToProps = (dispatch) => {
     return {
         userSignup: (data) => {
@@ -131,4 +136,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(null, mapDispatchToProps)(Signup);
+export default connect(null, mapDispatchToProps)(Signup);*/
