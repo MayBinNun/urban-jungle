@@ -73,7 +73,7 @@ class Login extends Component{
                             <h3 className='text-center text-uppercase font-weight-bold '>
                                 New Customer?
                             </h3>
-                            <Link to=''>
+                            <Link to='/Signup'>
                                 <Form.Label/>
                                 <Button block variant='warning' bsSize="large" className='mt-4'>
                                     Signup
