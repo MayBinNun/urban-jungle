@@ -14,8 +14,8 @@ const express = require('express'),
 const redis = require("redis");
 const client = redis.createClient();
 
-client.on('error', (err) => {
-    console.log("Redis Error - " + err);
+client.on("connect", function() {
+    console.log("You are now connected to redis");
 });
 
 const SECRET = 'secret',
@@ -88,7 +88,7 @@ app.post('/api/items/:email/:title/:action', async (req, res) => {
         }
 
         await setRedisData('data', data);
-        // await writeFileAsync('./data.json', JSON.stringify(data));
+        //await writeFileAsync('./data.json', JSON.stringify(data));
         res.status(200).send({msg: 'Items we\'re updated'});
     } catch (e) {
         res.status(500).send({msg: e.message});
@@ -132,17 +132,24 @@ app.get('/api/admin/data/:email', async (req, res) => {
 //Login user
 app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
     try {
-        const data = await getRedisData("data"),
-            email = req.params.email,
+       // const data = await getRedisData("data")
+       const email = req.params.email,
             password = req.params.password,
             maxAge = req.params.remember === "true" ? (10 * 365 * 24 * 60 * 60) : (60 * 5 * 1000);
-        if (data[email] && data[email].password === password) {
-            const token = jwt.sign({email}, SECRET);
-            res.cookie('token_mama', token, {maxAge: maxAge});
-            res.status(200).send({msg: 'Login successful', data: data[email]});
-        } else {
-            res.status(500).send({msg: 'Login failed... Either email or password are incorrect'});
-        }
+        client.hget('users', email, (err, data) => {
+            if (err) res.redirect('/');
+            else if (data != null) {
+                if (Object.values(JSON.parse(data))[0] == password) {
+                    const token = jwt.sign({email}, SECRET);
+                    res.cookie('token_mama', token, {maxAge: maxAge});
+                    res.status(200).send({msg: `The user ${email}, logged in succesfully...`});
+                } else {
+                    res.status(500).send({msg: `wrong password`});
+                }
+            } else {
+                res.status(500).send({msg: `wrong email adress`});
+            }
+        });
     } catch (e) {
         res.status(500).send({msg: e.message});
     }
@@ -170,36 +177,28 @@ app.post('/api/user/signup', async (req, res) => {
             firstName = capitalize(req.body.firstName),
             lastName = capitalize(req.body.lastName),
             country = req.body.country;
-        const data = await getRedisData("data");
-        if (!data[email]) {
-            data[email] = {
-                "user": {
-                    "firstName": firstName,
-                    "lastName": lastName,
-                    "address": address,
-                    "city": city,
-                    "country": country,
-                    "houseNum": houseNum,
-                    "email": email,
-                    "zip": zip
-                },
-                "password": password,
-                "orders": {},
-                "currentItems": {}
-            };
-            await setRedisData('data', data);
-            await writeFileAsync('./data.json', JSON.stringify(data));
-            const token = jwt.sign({email}, SECRET);
-            res.cookie('token_mama', token, {maxAge: 60 * 5 * 1000});
-            res.status(200).send({msg: 'Signup successful'});
-        } else {
-            res.status(500).send({msg: `The user ${email}, is already signed up...`});
+        let obj = {
+            password: password, address: address, houseNumber: houseNum, city: city, zipCode: zip, firstName: firstName,
+            lastName: lastName, country: country
         }
+        client.hget('users', email, (err, data) => {
+            if (err) res.redirect('/');
+            else if (data != null) {
+                res.status(500).send({msg: `The user ${email}, is already signed up...`});
+            } else {
+                client.hmset('users', email, JSON.stringify(obj));
+                res.status(200).send({msg: `The user ${email}, signed up succesfully...`});
+            }
+        });
+        // await setRedisData('data', JSON.stringify(data));
+        await writeFileAsync('./data.json', JSON.stringify(obj));
+        const token = jwt.sign({email}, SECRET);
+        res.cookie('token_mama', token, {maxAge: 60 * 5 * 1000});
+        res.status(200).send({msg: 'Signup successful'});
     } catch (e) {
         res.status(500).send({msg: e.message});
     }
 });
-
 //Delete a user
 app.delete('/api/user/:email/:password', async (req, res) => {
     try {
@@ -283,4 +282,3 @@ function capitalize(str) {
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 module.exports = app;
-
