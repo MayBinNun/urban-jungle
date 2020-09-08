@@ -7,10 +7,12 @@ import Signup from "./components/Pages/Signup/Signup";
 import Home from  "./components/funcComponents/Home/Home";
 import Admin from "./components/Pages/Admin/Admin";
 import Checkout from "./components/Pages/Checkout/Checkout";
+import backround from "./assets/backround.jpg";
+
 
 function App() {
   return (
-    <div>
+    <div style={{ backgroundImage:`url(${backround})`, position: 'fixed', minWidth: "100%", minHeight: '100%', backgroundSize: 'cover', backgroundPosition:'center'}}>
         <Route path={"/"} component={Toolbar}/>
         <Switch>
             <Route path={"/Login"} component={Login}/>
