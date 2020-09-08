@@ -6,12 +6,12 @@ import Col from "react-bootstrap/Col";
 import {Link} from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
-import PlantItem from "../../funcComponents/plantItem/PlantItem";
+import PlantItem from "../../funcComponents/Cards/PlantItem";
 import classes from './PlantMenu.module.css';
 
 import {cards} from "../../../data/data-export";
 
-class PlantMenu extends Component {
+class PlantMenu extends Component{
 
     state = {
         cards: [
