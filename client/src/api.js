@@ -38,3 +38,29 @@ export async function getAdminData(email, loggedIn) {
         alert('oops, this data is only for an admin eyes')
     }
 }
+
+export async function insertTicket(data) {
+    let res = await fetch('/api/ticket/add', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    const json = await res.json();
+    if (res.status === 200) {
+        return json;
+    } else {
+        alert(json.msg)
+    }
+}
+
+export async function getTicketsInfo() {
+        const res = await fetch(`/api/ticket/getAll`);
+        const json = await res.json();
+        if (res.status === 200) {
+            return json;
+        } else {
+            alert(json.msg)
+        }
+}

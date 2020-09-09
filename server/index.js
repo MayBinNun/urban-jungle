@@ -34,7 +34,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-const getRedisData = key => new Promise(async (resolve, reject) => {
+/*const getRedisData = key => new Promise(async (resolve, reject) => {
     client.get(key, (err, reply) => {
         if (reply) {
             console.log("Read data from Redis");
@@ -59,7 +59,7 @@ const setRedisData = (key, data) => {
 app.get('/getRedisData', async (req, res) => {
     const data = await getRedisData("data");
     res.status(200).send(data);
-});
+});*/
 //Update user's items in db
 app.post('/api/items/:email/:title/:action', async (req, res) => {
     try {
@@ -142,11 +142,9 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
                 var obj = JSON.parse(data);
                 console.log(obj.password);
                 if (obj.password === password) {
-                    console.log("true");
                     const token = jwt.sign({email}, SECRET);
                     res.cookie('token_mama', token, {maxAge: maxAge});
                     res.status(200).send({msg: `The user ${email}, logged in succesfully...`});
-                    console.log("true");
                 } else {
                     res.status(500).send({msg: `Wrong password`});
                 }
@@ -183,7 +181,7 @@ app.post('/api/user/signup', async (req, res) => {
             country = req.body.country;
         let obj = {
             password: password, address: address, houseNumber: houseNum, city: city, zipCode: zip, firstName: firstName,
-            lastName: lastName, country: country
+            lastName: lastName, country: country, orders: {}, currentItems: {}
         }
         client.hget('users', email, (err, data) => {
             if (err) res.redirect('/');
@@ -203,21 +201,13 @@ app.post('/api/user/signup', async (req, res) => {
         res.status(500).send({msg: e.message});
     }
 });
-//Delete a user
-app.delete('/api/user/:email/:password', async (req, res) => {
+
+//Get all tickets
+app.get('/api/tickets/get', async (req, res) => {
     try {
-        const data = await getRedisData("data"),
-            email = req.params.email,
-            password = req.params.password;
-        if (data[email] && data[email].password === password) {
-            delete data[email];
-            await setRedisData('data', data);
-            // await writeFileAsync('./data.json', JSON.stringify(data));
-            res.status(200).send({msg: 'User was deleted successfully', data: data[email]});
-        } else {
-            res.status(500).send({msg: 'User deletion failed'});
-        }
-    } catch (e) {
+            let data = JSON.parse(client.hgetall('tickets'));
+            res.status(200).send({msg: 'Tickets  data', data: data});
+      } catch (e) {
         res.status(500).send({msg: e.message});
     }
 });
@@ -232,22 +222,50 @@ app.post('/api/order/new/:email', async (req, res) => {
             totalPrice = req.body.totalPrice,
             orderId = uniqid(),
             date = Date.now();
-        let data = await getRedisData("data");
-        if (data[email]) {
-            data[email].orders[orderId] = {
-                total: total,
-                totalPrice: totalPrice,
-                payment: payment,
-                items: items,
-                date: date
-            };
+        client.hget('users', email, (err, data) => {
+            if (err) res.redirect('/');
+            else if (data != null) {
+                let ord = {
+                    id: orderid,
+                    total: total,
+                    totalPrice: totalPrice,
+                    payment: payment,
+                    items: items,
+                    date: date
+                };
+                client.hset('users', email, { orders: JSON.stringify(ord)});
+                res.status(200).send({
+                    msg: 'Order successfully placed',
+                    data: ord,
+                    orderId: orderId,
+                    date: date
+                });
+            } else {
+                res.status(500).send({msg: `Error placing order`});
+            }
+            //  let data = await getRedisData("data");
             data[email].currentItems = {};
-            await setRedisData('data', data);
-            // await writeFileAsync('./data.json', JSON.stringify(data));
-            res.status(200).send({msg: 'Order successfully placed', data: data[email], orderId: orderId, date: date});
-        } else {
-            res.status(500).send({msg: `Error placing order`});
+        });
+    } catch (e) {
+        res.status(500).send({msg: e.message});
+    }
+});
+
+//Insert new ticket
+app.post('/api/tickets/add', async (req, res) => {
+    try {
+        let obj = {
+            id: req.body.id, price: req.body.price, name: req.body.name, description: req.body.description
         }
+        client.hget('tickets', id, (err, data) => {
+            if (err) res.redirect('/');
+            else if (data != null) {
+                res.status(500).send({msg: `already exist product with this id`});
+            } else {
+                client.hmset('tickets', id, JSON.stringify(obj));
+                res.status(200).send({msg: `The ticket added succesfully...`});
+            }
+        });
     } catch (e) {
         res.status(500).send({msg: e.message});
     }

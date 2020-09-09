@@ -38,7 +38,7 @@ class Signup extends Component {
 
     handleSubmit = async (event) => {
         //   this.props.userSignup(this.state);
-        alert('done');
+
         event.preventDefault();
         await this.setState({email: this.state.email.toLowerCase()});
         let res = await postSignup(this.state);
