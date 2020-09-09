@@ -41,11 +41,13 @@ class Admin extends Component {
         }*/
 
         return (
-            <div className={classes.Admin}>
-                <div>
-                    {this.state.cards?.map(item => <UserData item={item}/>)}
-                </div>
-            </div>
+            <div></div>
+
+            // <div className={classes.Admin}>
+            //     <div>
+            //         {this.state.cards?.map(item => <UserData item={item}/>)}
+            //     </div>
+            // </div>
         )
     }
 }
