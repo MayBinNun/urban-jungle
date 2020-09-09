@@ -145,9 +145,15 @@ app.get('/api/user/auth', async (req, res) => {
 //Admin get all database
 app.get('/api/admin/data/:email', async (req, res) => {
     try {
-        if (req.params.email === 'admin@urbanjungle.com') {
-            let data = JSON.parse(client.hgetall('users'));
-            console.log(data);ƒ
+        if (req.params.email === 'Admin') {
+            client.hgetall('users',function(err,res) {
+                if (err){
+                    alert("couldnt load data");
+                }
+                else{
+                    data = res;
+                }
+            });
             res.status(200).send({msg: 'Admin data', data: data});
         } else {
             res.status(500).send({msg: 'User can\'t get this data...'});
