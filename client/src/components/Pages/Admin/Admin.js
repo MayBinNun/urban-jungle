@@ -15,10 +15,15 @@ class Admin extends Component {
             const json = (await getAdminData(this.props.email, this.props.loggedIn)).data;
             this.setState({json: json});
         }*/
+            try{
+                const res = (await getAdminData("Admin", true));
+                this.setState({cards: res.data});
+                console.log(this.state.cards);
+            } catch (e) {
+                this.setState({cards: []});
+                alert(e.message);
+            }
 
-            const json = (await getAdminData("Admin", true)).data;
-            this.setState({cards: json});
-            console.log(this.state.cards);
 
     }
 
