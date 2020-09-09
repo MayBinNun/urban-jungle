@@ -5,20 +5,20 @@ import Button from "react-bootstrap/Button";
 
 
 
-const cartSomeUp= ({props}) => (
-
+function cartSomeUp (props) {
+    return(
         <div>
             <h4 className='text-uppercase my-auto'>Cart Totals</h4>
             <Card className='mt-3'>
                 <Card.Header className='pl-2 font-weight-bold'>
-                    {props.total} Products
+                    {/* {props.total}*/} Products
                 </Card.Header>
                 <Card.Body className='d-flex justify-content-between p-2 mt-3'>
                     <Card.Text>
                         Products Price
                     </Card.Text>
                     <Card.Text>
-                        ${props.totalPrice}
+                        {/*    ${props.totalPrice}*/}
                     </Card.Text>
                 </Card.Body>
 
@@ -27,7 +27,7 @@ const cartSomeUp= ({props}) => (
                         Delivery
                     </Card.Text>
                     <Card.Text>
-                        ${3.50}
+                        {/*    ${3.50}*/}
                     </Card.Text>
                 </Card.Body>
 
@@ -36,12 +36,12 @@ const cartSomeUp= ({props}) => (
                         Total
                     </Card.Text>
                     <Card.Text>
-                        ${props.totalPrice + 3.50}
+                        {/* ${props.totalPrice + 3.50}*/} 3.50
                     </Card.Text>
                 </Card.Body>
                 <Card.Footer>
                     <Button onClick={props.handleNewOrder} variant='warning' block disabled={props.disabled}>
-                        {props.buttonText}
+                        {/*{props.buttonText}*/} hey
                     </Button>
                     <hr/>
                     <h6 className='mt-3'>
@@ -55,7 +55,11 @@ const cartSomeUp= ({props}) => (
                 </Card.Footer>
             </Card>
 
-        </div>
-    );
+        </div>);
+
+
+}
+
+
 
 export default cartSomeUp;

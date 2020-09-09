@@ -17,6 +17,7 @@ class Admin extends Component {
         }*/
             try{
                 const res = (await getAdminData("Admin", true));
+                console.log(res)
                 this.setState({cards: res.data});
                 console.log(this.state.cards);
             } catch (e) {
@@ -32,16 +33,16 @@ class Admin extends Component {
         var i = 0;
         for (const card of  this.state.cards){
 
-        }*/
+            }*/
+
 
         return (
-            <div></div>
 
-            // <div className={classes.Admin}>
-            //     <div>
-            //         {this.state.cards?.map(item => <UserData item={item}/>)}
-            //     </div>
-            // </div>
+             <div className={classes.Admin}>
+                {/* <div>
+                     {this.state.cards?.map((item) => <UserData item={item}/>)}
+                 </div>*/}
+             </div>
         )
     }
 }

@@ -4,10 +4,11 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {Link} from "react-router-dom";
-import cartSomeUp from "../../funcComponents/Cart/CartSomeUp";
+import CartSomeUp from "../../funcComponents/Cart/CartSomeUp";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+
 
 
 class Checkout extends Component {
@@ -37,6 +38,8 @@ class Checkout extends Component {
              this.props.Reset();
              this.props.history.push('');
          }*/
+
+        console.log("hey");
     };
 
     render() {
@@ -169,11 +172,11 @@ class Checkout extends Component {
         return (
             <div className={classes.Checkout}>
                 <React.Fragment>
-                    {/* <CustomParallax title='Checkout' img={home_top} height={300}/>*/}
                     <Container className='my-auto Checkout'>
                         {/*this.props.loggedIn*/ true ? checkout : needToLogin}
                     </Container>
                 </React.Fragment>
+                <CartSomeUp handleNewOrder={this.handleNewOrder} disabled={this.validateForm}/>
             </div>
         );
     }

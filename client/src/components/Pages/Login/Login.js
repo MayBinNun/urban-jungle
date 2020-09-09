@@ -41,6 +41,7 @@ class Login extends Component {
 
         e.preventDefault();
         let res = await getSignin(this.state.email.toLowerCase(), this.state.password, this.state.remember);
+        console.log(res);
        // res.data.isAdmin ? this.props.setLoggedin(true) : this.props.setLoggedin(false);
 
 

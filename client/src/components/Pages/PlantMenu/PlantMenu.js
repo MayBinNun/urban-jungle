@@ -9,7 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import PlantItem from "../../funcComponents/Cards/PlantItem";
 import classes from './PlantMenu.module.css';
 import {getTicketsInfo} from "../../../api";
-//import {cards} from "../../../data/data-export";
+import {cards} from "../../../data/data-export";
 import {getAdminData} from "../../../api";
 
 class PlantMenu extends Component {
@@ -19,23 +19,23 @@ class PlantMenu extends Component {
     };
 
     async componentDidMount() {
-        try{
-            const json = await getTicketsInfo();
-            const data = json.data;
-            this.setState({cards: data});
-           /* console.log(this.state.cards);*/
+         try{
+             const res = await getTicketsInfo();
+             const data = res.data;
+             this.setState({cards: data});
+             console.log(this.state.cards);
         }catch (e) {
             this.setState({cards:[]});
             alert(e);
         }
-
+         /*   this.getTickets();*/
     }
 
-    /*
+
         getTickets() {
             this.setState({cards: cards});
         }
-    */
+
 
     render() {
         /*const items = [];
@@ -50,7 +50,7 @@ class PlantMenu extends Component {
         return (
             <Container className='pb-4' style={{background: 'dark'}}>
                 <div className={classes.PlantItemList}>
-                    {items.map((item) => <PlantItem item={item}/>)}
+                    {items.map((item) => <PlantItem item={item} addToCart={this.props.addToCart}/>)}
                 </div>
             </Container>
         )
