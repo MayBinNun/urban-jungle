@@ -9,7 +9,9 @@ const express = require('express'),
     rateLimit = require("express-rate-limit"),
     readdirAsync = promisify(fs.readdir),
     readFileAsync = promisify(fs.readFile),
-    writeFileAsync = promisify(fs.writeFile);
+    writeFileAsync = promisify(fs.writeFile),
+    creds = require('./creds'),
+    nodemailer = require('nodemailer');
 
 const redis = require("redis");
 const client = redis.createClient();
@@ -26,6 +28,15 @@ const SECRET = 'secret',
         max: 1000, // limit each IP to 100 requests per windowMs
         message: "Too many requests from this IP, please try again later"
     });
+
+let transport = {
+    host: 'smtp.gmail.com', // Don’t forget to replace with the SMTP host of your provider
+    port: 587,
+    auth: {
+        user: creds.USER,
+        pass: creds.PASS
+    }
+}
 
 app.set('trust proxy', 1);
 app.use(limiter);
@@ -65,35 +76,51 @@ app.post('/api/items/:email/:title/:action', async (req, res) => {
     try {
         const email = req.params.email,
             title = req.params.title,
-            action = req.params.action;
-        let data = await getRedisData("data");
-        switch (action) {
-            case 'ADD':
-                if (data[email].currentItems[title]) {
-                    data[email].currentItems[title]++;
-                } else {
-                    data[email].currentItems[title] = 1;
-                }
-                break;
-            case 'SUB':
-                if (data[email].currentItems[title] > 1) {
-                    data[email].currentItems[title]--;
-                } else {
-                    delete data[email].currentItems[title];
-                }
-                break;
-            case 'ZERO':
-                delete data[email].currentItems[title];
-                break;
-        }
+            action = req.params.action,
+            description = req.params.description;
 
-        await setRedisData('data', data);
-        //await writeFileAsync('./data.json', JSON.stringify(data));
-        res.status(200).send({msg: 'Items we\'re updated'});
+        client.hgetall('users', email, (err, data) => {
+            if (err) res.redirect('/');
+            else if (data != null) {
+                let obj = data;
+                if(obj.orders.name ){
+                    const orders = JSON.parse(data.orders);
+                    orders.push({
+                        name: title,
+                        desc: description;
+                    })
+                    obj.orders = JSON.stringify(orders);
+                    client.hmset(email, obj);
+                }
+                switch (action) {
+                    case 'ADD':
+                        if (data[email].currentItems[title]) {
+                            data[email].currentItems[title]++;
+                        } else {
+                            data[email].currentItems[title] = 1;
+                        }
+                        break;
+                    case 'SUB':
+                        if (data[email].currentItems[title] > 1) {
+                            data[email].currentItems[title]--;
+                        } else {
+                            delete data[email].currentItems[title];
+                        }
+                        break;
+                    case 'ZERO':
+                        delete data[email].currentItems[title];
+                        break;
+                }
+                res.status(200).send({msg: 'Items we\'re updated'});
+            } else {
+                res.status(500).send({msg: `Couldnt find user orders`});
+            }
+        });
     } catch (e) {
         res.status(500).send({msg: e.message});
     }
 });
+
 
 //Authenticate user with cookie on lunching the app and getting user's data
 app.get('/api/user/auth', async (req, res) => {
@@ -118,8 +145,8 @@ app.get('/api/user/auth', async (req, res) => {
 //Admin get all database
 app.get('/api/admin/data/:email', async (req, res) => {
     try {
-        if (req.params.email === 'Admin') {
-            let data = JSON.parse(client.hgetall('users'));
+        if (req.params.email === 'admin@urbanjungle.com') {
+            let data = JSON.parse(('users'));
             res.status(200).send({msg: 'Admin data', data: data});
         } else {
             res.status(500).send({msg: 'User can\'t get this data...'});
@@ -132,7 +159,6 @@ app.get('/api/admin/data/:email', async (req, res) => {
 //Login user
 app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
     try {
-       // const data = await getRedisData("data")
        const email = req.params.email,
             password = req.params.password,
             maxAge = req.params.remember === "true" ? (10 * 365 * 24 * 60 * 60) : (60 * 5 * 1000);
@@ -170,18 +196,9 @@ app.post('/api/user/logout', async (req, res) => {
 //Signup new user
 app.post('/api/user/signup', async (req, res) => {
     try {
-        const email = req.body.email,
-            password = req.body.password,
-            address = req.body.address,
-            houseNum = req.body.houseNum,
-            city = capitalize(req.body.city),
-            zip = req.body.zip,
-            firstName = capitalize(req.body.firstName),
-            lastName = capitalize(req.body.lastName),
-            country = req.body.country;
         let obj = {
-            password: password, address: address, houseNumber: houseNum, city: city, zipCode: zip, firstName: firstName,
-            lastName: lastName, country: country, orders: {}, currentItems: {}
+            password: req.body.password, address: req.body.address, houseNumber: req.body.houseNum, city: capitalize(req.body.city), zipCode: req.body.zip, firstName: capitalize(req.body.firstName),
+            lastName: capitalize(req.body.lastName), country: req.body.country, orders: {}, currentItems: {}
         }
         client.hget('users', email, (err, data) => {
             if (err) res.redirect('/');
@@ -192,8 +209,6 @@ app.post('/api/user/signup', async (req, res) => {
                 res.status(200).send({msg: `The user ${email}, signed up succesfully...`});
             }
         });
-        // await setRedisData('data', JSON.stringify(data));
-        await writeFileAsync('./data.json', JSON.stringify(obj));
         const token = jwt.sign({email}, SECRET);
         res.cookie('token_mama', token, {maxAge: 60 * 5 * 1000});
         res.status(200).send({msg: 'Signup successful'});
@@ -226,7 +241,19 @@ app.post('/api/order/new/:email', async (req, res) => {
         client.hget('users', email, (err, data) => {
             if (err) res.redirect('/');
             else if (data != null) {
-                let ord = {
+                let obj = data;
+                if(obj.order){
+                    const orders = JSON.parse(obj.orders);
+                    orders.push({
+                        name: itemName,
+                        price: itemPrice,
+                        desc: itemDescription,
+                        image: `${req.file.filename}`
+                    })
+                    newObj.items = JSON.stringify(newArr)
+
+                }
+                const ord = {
                     id: orderid,
                     total: total,
                     totalPrice: totalPrice,
@@ -284,6 +311,38 @@ app.get('/api/gallery', async (req, res) => {
     } catch (e) {
         res.status(500).send({msg: e.message});
     }
+});
+
+//connect transporter
+let transporter = nodemailer.createTransport(transport);
+transporter.verify((error, success) => {
+    if (error) {
+        console.log(error);
+    } else {
+        console.log('Server is ready to take messages');
+    }
+});
+
+//send contactUS us message
+app.get('/api/contactUS', async (req, res) => {
+    const name = req.body.name,
+     email = req.body.email,
+     message = req.body.message,
+     content = `name: ${name} \n email: ${email} \n message: ${message} `
+
+    let mail = {
+        from: name,
+        to: 'urbanjungle1212@gmail.com',
+        subject: 'New Message from Contact Form',
+        text: content
+    }
+
+    transporter.sendMail(mail, (err, data) => {
+        if (err) { res.redirect('/');
+        } else {
+            res.status(200).send({msg: `Massage sent succesfullyr`});
+            }
+    });
 });
 
 //Serves react client static files
