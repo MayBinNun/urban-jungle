@@ -23,7 +23,8 @@ class Signup extends Component {
     };
 
     validateForm() {
-        return !(this.state.agree && this.state.firstName.length > 0 && this.state.lastName.length > 0 && this.state.address.length > 0 && this.state.city.length > 0 && this.state.country.length > 0 && this.state.houseNum.length > 0 && this.state.email.length > 0 && this.state.password.length > 0);
+        return false ;
+       // return !(this.state.agree && this.state.firstName.length > 0 && this.state.lastName.length > 0 && this.state.address.length > 0 && this.state.city.length > 0 && this.state.country.length > 0 && this.state.houseNum.length > 0 && this.state.email.length > 0 && this.state.password.length > 0);
     }
 
     handleChange = e => {

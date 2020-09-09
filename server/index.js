@@ -202,6 +202,7 @@ app.post('/api/user/logout', async (req, res) => {
 //Signup new user
 app.post('/api/user/signup', async (req, res) => {
     try {
+        let email = req.body.password;
         let obj = {
             password: req.body.password, address: req.body.address, houseNumber: req.body.houseNum, city: capitalize(req.body.city), zipCode: req.body.zip, firstName: capitalize(req.body.firstName),
             lastName: capitalize(req.body.lastName), country: req.body.country, orders: {}, currentItems: {}
