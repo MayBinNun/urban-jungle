@@ -1,4 +1,4 @@
-import React from "react";
+import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
@@ -8,17 +8,30 @@ import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Classes from "./PlantItem.module.css";
 
-const plantItem = ({item}) => (
+class plantItem extends Component{
 
-    <div key={item.id} className="card" style={{width: '18rem'}}>
-        <img className="card-img-top" src={item.url} alt="Card image cap"/>
+
+    handleAddToCard = () => {
+        debugger
+        this.props.addToCart(this.props.item);
+    }
+
+    render() {
+        return(  <div key={this.props.item.id} className="card" style={{width: '18rem'}}>
+            <img className="card-img-top" src={this.props.item.url} alt="Card image cap"/>
             <div className="card-body">
-                <h5 className="card-title">{item.name}</h5>
-                <p className="card-text">{item.description}</p>
-                <a href={""} className="btn btn-primary">Add to cart</a>
+                <h5 className="card-title">{this.props.item.name}</h5>
+                <p className="card-text">{this.props.item.description}</p>
+                <button onClick={this.handleAddToCard} className="btn btn-primary">Add to cart</button>
             </div>
-    </div>
+        </div>);
+    }
+}
 
-);
+
+
+
+
+
 
 export default plantItem;

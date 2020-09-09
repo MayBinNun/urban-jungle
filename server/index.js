@@ -168,6 +168,7 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
        const email = req.params.email,
             password = req.params.password,
             maxAge = req.params.remember === "true" ? (10 * 365 * 24 * 60 * 60) : (60 * 5 * 1000);
+       const isadmin = (req.params.email === 'Admin');
         client.hget('users', email, (err, data) => {
             if (err) res.redirect('/');
             else if (data != null) {
@@ -176,12 +177,12 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
                 if (obj.password === password) {
                     const token = jwt.sign({email}, SECRET);
                     res.cookie('token_mama', token, {maxAge: maxAge});
-                    res.status(200).send({msg: `The user ${email}, logged in succesfully...`, success:true});
+                    res.status(200).send({msg: `The user ${email}, logged in succesfully...`, success:true, isAdmin:isadmin});
                 } else {
                     res.status(500).send({msg: `Wrong password`, success:false} );
                 }
             } else {
-                res.status(500).send({msg: `Wrong email adress`});
+                res.status(500).send({msg: `Wrong email adress`, success:false});
             }
         });
     } catch (e) {
