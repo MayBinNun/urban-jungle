@@ -17,11 +17,10 @@ export async function postSignup(data) {
 
 export async function getSignin(email, password, remember){
     let res = await fetch(`/api/user/login/${email}/${password}/${remember}`);
-    const json = await res.json();
     if (res.status === 200) {
-        return json;
+        return res;
     } else {
-        alert(json.msg)
+        alert(res.msg)
     }
 }
 
