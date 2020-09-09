@@ -26,8 +26,8 @@ class Toolbar extends Component {
             </ul>
             <ul className={classes.NavList}>
             <NavItem link ="/Login" >Login/Logout</NavItem>
-            <NavItem link ="/Admin" >Admin</NavItem>
-            <ShoppingCartBadge link="/Checkout" numOfItems='0'/>
+            {this.props.isAdmin && <NavItem link ="/Admin" >Admin</NavItem>}
+            {this.props.isLoggedIn && <ShoppingCartBadge link="/Checkout" numOfItems='0'/>}
             </ul>
         </header>);
     }

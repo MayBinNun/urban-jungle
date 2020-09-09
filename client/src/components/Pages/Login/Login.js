@@ -13,7 +13,7 @@ import {getSignin} from "../../../api";
 import {getLogin} from "../utils/api";
 import {Set, Reset} from "../redux/actions/cartActions";*/
 
-class Login extends Component{
+class Login extends Component {
     state = {
         email: '',
         password: '',
@@ -40,6 +40,9 @@ class Login extends Component{
 
         e.preventDefault();
         let res = await getSignin(this.state.email.toLowerCase(), this.state.password, this.state.remember);
+        if (res.success) {
+            res.data.isAdmin ? this.props.setLoggedin(true) : this.props.setLoggedin(false);
+        }
     };
 
     setItemsNum(items) {
@@ -58,7 +61,8 @@ class Login extends Component{
                             <Form onSubmit={this.handleSubmit} className='mt-4'>
                                 <Form.Group controlId="email">
                                     <Form.Label>Email/Username</Form.Label>
-                                    <Form.Control placeholder="Email/Username" autoFocus required value={this.state.email}
+                                    <Form.Control placeholder="Email/Username" autoFocus required
+                                                  value={this.state.email}
                                                   onChange={this.handleChange}/>
                                     <Form.Text className="text-muted">
                                         We'll never share your email with anyone else.
