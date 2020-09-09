@@ -4,21 +4,10 @@ import { getAdminData } from "../../../api";
 import { Container } from "react-bootstrap";
 import classes from "./Admin.module.css";
 import UserData from '../../funcComponents/Cards/UserCard';
-import PlantItem from "../../funcComponents/Cards/PlantItem";
-import {cards} from "../../../data/data-export";
 
 class Admin extends Component {
     state = {
-        cards: [{
-    firstName: 'firstName',
-    lastName: 'lastName',
-    address: 'address',
-    city: 'city',
-    country: 'country',
-    houseNum: 'houseNum',
-    email: 'email',
-    zip: 'zip'
-            }]
+        cards: []
     };
 
     async componentDidMount() {
@@ -29,7 +18,7 @@ class Admin extends Component {
 
             const json = (await getAdminData("Admin", true)).data;
             this.setState({cards: json});
-            console.log(cards);
+            console.log(this.state.cards);
 
     }
 

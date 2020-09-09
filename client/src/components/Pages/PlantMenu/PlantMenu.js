@@ -8,30 +8,34 @@ import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PlantItem from "../../funcComponents/Cards/PlantItem";
 import classes from './PlantMenu.module.css';
+import {getTicketsInfo} from "../../../api";
+//import {cards} from "../../../data/data-export";
+import {getAdminData} from "../../../api";
 
-import {cards} from "../../../data/data-export";
-
-class PlantMenu extends Component{
+class PlantMenu extends Component {
 
     state = {
-        cards: [
-            {
-                id: 1,
-                url: '',
-                price: 10,
-                name:'succulent',
-                description:'lots of sun, lots of love'
-            },
-        ]
+        cards: []
     };
 
-    componentDidMount = async () => {
-    this.getTickets();
-        };
+    async componentDidMount() {
+        try{
+            const json = await getTicketsInfo();
+            const data = json.data;
+            this.setState({cards: data});
+           /* console.log(this.state.cards);*/
+        }catch (e) {
+            this.setState({cards:[]});
+            alert(e);
+        }
 
-    getTickets() {
-        this.setState({cards: cards});
     }
+
+    /*
+        getTickets() {
+            this.setState({cards: cards});
+        }
+    */
 
     render() {
         /*const items = [];
@@ -39,14 +43,16 @@ class PlantMenu extends Component{
         for (const card of  this.state.cards){
 
         }*/
+        debugger
 
+        const items = [...this.state.cards];
+        debugger
         return (
-
             <Container className='pb-4' style={{background: 'dark'}}>
                 <div className={classes.PlantItemList}>
-                {this.state.cards?.map(item => <PlantItem item={item}/>)}
-            </div>
-                </Container>
+                    {items.map((item) => <PlantItem item={item}/>)}
+                </div>
+            </Container>
         )
     }
 

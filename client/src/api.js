@@ -56,11 +56,12 @@ export async function insertTicket(data) {
 }
 
 export async function getTicketsInfo() {
-        const res = await fetch(`/api/ticket/getAll`);
-        const json = await res.json();
-        if (res.status === 200) {
-            return json;
-        } else {
-            alert(json.msg)
-        }
+    debugger
+    const res = await fetch('/api/tickets/get');
+    const json = await res.json();
+    if (res.status === 200) {
+        return json;
+    } else {
+        alert(json.msg)
+    }
 }

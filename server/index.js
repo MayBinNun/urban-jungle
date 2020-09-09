@@ -205,6 +205,7 @@ app.post('/api/user/signup', async (req, res) => {
 //Get all tickets
 app.get('/api/tickets/get', async (req, res) => {
     try {
+             debugger
             let data = JSON.parse(client.hgetall('tickets'));
             res.status(200).send({msg: 'Tickets  data', data: data});
       } catch (e) {
