@@ -87,7 +87,7 @@ app.post('/api/items/:email/:title/:action', async (req, res) => {
                     const orders = JSON.parse(data.orders);
                     orders.push({
                         name: title,
-                        desc: description;
+                        desc: description
                     })
                     obj.orders = JSON.stringify(orders);
                     client.hmset(email, obj);
@@ -146,7 +146,8 @@ app.get('/api/user/auth', async (req, res) => {
 app.get('/api/admin/data/:email', async (req, res) => {
     try {
         if (req.params.email === 'admin@urbanjungle.com') {
-            let data = JSON.parse(('users'));
+            let data = JSON.parse(client.hgetall('users'));
+            console.log(data);ƒ
             res.status(200).send({msg: 'Admin data', data: data});
         } else {
             res.status(500).send({msg: 'User can\'t get this data...'});
