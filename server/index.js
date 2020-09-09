@@ -151,10 +151,9 @@ app.get('/api/admin/data/:email', async (req, res) => {
                     alert("couldnt load data");
                 }
                 else{
-                    data = res;
+                    res.status(200).send({msg: 'Admin data', data: res});
                 }
             });
-            res.status(200).send({msg: 'Admin data', data: data});
         } else {
             res.status(500).send({msg: 'User can\'t get this data...'});
         }
@@ -227,13 +226,19 @@ app.post('/api/user/signup', async (req, res) => {
 //Get all tickets
 app.get('/api/tickets/get', async (req, res) => {
     try {
-             debugger
-            let data = JSON.parse(client.hgetall('tickets'));
-            res.status(200).send({msg: 'Tickets  data', data: data});
-      } catch (e) {
-        res.status(500).send({msg: e.message});
-    }
+    client.hgetall('tickets',function(err,res) {
+        if (err){
+            alert("couldnt load data");
+        }
+        else{
+            res.status(200).send({msg: 'tickets:', data: res});
+        }
+    });
+} catch (e) {
+    res.status(500).send({msg: e.message});
+}
 });
+
 
 //Post a new order
 app.post('/api/order/new/:email', async (req, res) => {
@@ -305,6 +310,8 @@ app.post('/api/tickets/add', async (req, res) => {
         res.status(500).send({msg: e.message});
     }
 });
+
+
 
 //Get gallery images (Simulates database access)
 app.get('/api/gallery', async (req, res) => {
