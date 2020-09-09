@@ -146,14 +146,14 @@ app.get('/api/user/auth', async (req, res) => {
 app.get('/api/admin/data/:email', async (req, res) => {
     try {
         if (req.params.email === 'Admin') {
-            client.hgetall('users',function(err,res) {
+            client.hgetall('users', (err,data) => {
                 if (err){
                     alert("couldnt load data");
                 }
-                else{
-                    res.status(200).send({msg: 'Admin data', data: res});
+                else if (data != null) {
+                    res.status(200).send({msg: 'data sent', data});
                 }
-            });
+            })
         } else {
             res.status(500).send({msg: 'User can\'t get this data...'});
         }
