@@ -87,8 +87,8 @@ app.post('/api/items/:email/:title/:action', async (req, res) => {
                     const orders = JSON.parse(data.orders);
                     orders.push({
                         name: title,
-                        desc: description;
-                    })
+                        desc: description
+                })
                     obj.orders = JSON.stringify(orders);
                     client.hmset(email, obj);
                 }
@@ -159,7 +159,7 @@ app.get('/api/admin/data/:email', async (req, res) => {
 //Login user
 app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
     try {
-       const email = req.params.email,
+        const email = req.params.email,
             password = req.params.password,
             maxAge = req.params.remember === "true" ? (10 * 365 * 24 * 60 * 60) : (60 * 5 * 1000);
         client.hget('users', email, (err, data) => {
@@ -220,10 +220,10 @@ app.post('/api/user/signup', async (req, res) => {
 //Get all tickets
 app.get('/api/tickets/get', async (req, res) => {
     try {
-             debugger
-            let data = JSON.parse(client.hgetall('tickets'));
-            res.status(200).send({msg: 'Tickets  data', data: data});
-      } catch (e) {
+        debugger
+        let data = JSON.parse(client.hgetall('tickets'));
+        res.status(200).send({msg: 'Tickets  data', data: data});
+    } catch (e) {
         res.status(500).send({msg: e.message});
     }
 });
@@ -326,9 +326,9 @@ transporter.verify((error, success) => {
 //send contactUS us message
 app.get('/api/contactUS', async (req, res) => {
     const name = req.body.name,
-     email = req.body.email,
-     message = req.body.message,
-     content = `name: ${name} \n email: ${email} \n message: ${message} `
+        email = req.body.email,
+        message = req.body.message,
+        content = `name: ${name} \n email: ${email} \n message: ${message} `
 
     let mail = {
         from: name,
@@ -341,7 +341,7 @@ app.get('/api/contactUS', async (req, res) => {
         if (err) { res.redirect('/');
         } else {
             res.status(200).send({msg: `Massage sent succesfullyr`});
-            }
+        }
     });
 });
 
