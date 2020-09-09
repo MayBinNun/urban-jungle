@@ -19,16 +19,16 @@ class PlantMenu extends Component {
     };
 
     async componentDidMount() {
-        /* try{
-             const json = await getTicketsInfo();
-             const data = json.data;
+         try{
+             const res = await getTicketsInfo();
+             const data = res.data;
              this.setState({cards: data});
              console.log(this.state.cards);
         }catch (e) {
             this.setState({cards:[]});
             alert(e);
-        }*/
-            this.getTickets();
+        }
+         /*   this.getTickets();*/
     }
 
 

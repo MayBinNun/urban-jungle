@@ -176,13 +176,13 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
                 if (user.password === password) {
                     const token = jwt.sign({email}, SECRET);
                     res.cookie('token_mama', token, {maxAge: maxAge});
-                    res.status(200).send({msg: `The user ${email},signed in succesfully...`});
+                    res.status(200).send({msg: `The user ${email},signed in succesfully...`, success:true});
                 }
                 else {
-                    res.status(500).send({msg: `inncocrect password`});
+                    res.status(500).send({msg: `inncocrect password`, success:false});
                 }
             } else {
-                res.status(500).send({msg: `couldnt log in.`});
+                res.status(500).send({msg: `couldnt log in.`, success:false});
             }
         });
     } catch (e) {

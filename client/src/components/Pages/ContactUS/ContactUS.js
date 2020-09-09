@@ -6,10 +6,10 @@ import {Link} from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {contactUS} from "../../../api";
-import {Component} from "react";
+import React, { Component } from 'react';
 
 
-class contactUS extends Component {
+class ContactUS extends React.Component {
     state = {
             name: '',
             email: '',
@@ -31,6 +31,11 @@ class contactUS extends Component {
 
     onMessageChange(event) {
         this.setState({message: event.target.value})
+    }
+
+    handleSubmit( event ) {
+        event.preventDefault();
+        console.log(this.state);
     }
 
 
@@ -62,4 +67,4 @@ class contactUS extends Component {
     }
 }
 
-export default contactUS;
+export default ContactUS;

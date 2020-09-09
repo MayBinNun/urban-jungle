@@ -4,10 +4,10 @@ import {Route, Switch} from 'react-router-dom';
 import Toolbar from "./components/Pages/Toolbar/Toolbar";
 import PlantMenu from "./components/Pages/PlantMenu/PlantMenu";
 import Signup from "./components/Pages/Signup/Signup";
-import Home from "./components/funcComponents/Home/Home";
 import Admin from "./components/Pages/Admin/Admin";
 import backround from "./assets/backround.jpg";
 import Checkout from "./components/Pages/Checkout/Checkout";
+import ContactUS from "./components/Pages/ContactUS/ContactUS";
 
 
 export default class App extends Component {
@@ -51,6 +51,9 @@ export default class App extends Component {
                     <Route path={"/Menu"} render={() => <PlantMenu addToCart={this.addToCart}/>}/>
                     <Route path={"/Signup"} component={Signup}/>
                     <Route path={"/Admin"} component={Admin}/>
+{/*
+                    <Route path={"/ContactUS"} component={ContactUS}/>
+*/}
                     <Route path={"/Checkout"} render={() => <Checkout setLoggedin={this.setLoggedin}
                                                                       selectedProducts={this.state.selectedProducts}/>}/>
                 </Switch>
