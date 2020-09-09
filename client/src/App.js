@@ -14,7 +14,7 @@ export default class App extends Component {
 
     state = {
         isLoggedIn: false,
-        isAdmin: false,
+        isAdmin: true,
         selectedProducts:[]
     };
 
