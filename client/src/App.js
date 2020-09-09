@@ -6,8 +6,8 @@ import PlantMenu from "./components/Pages/PlantMenu/PlantMenu";
 import Signup from "./components/Pages/Signup/Signup";
 import Home from  "./components/funcComponents/Home/Home";
 import Admin from "./components/Pages/Admin/Admin";
-import Checkout from "./components/Pages/Checkout/Checkout";
 import backround from "./assets/backround.jpg";
+import Checkout from "./components/Pages/Checkout/Checkout";
 
 
 export default class App extends Component {

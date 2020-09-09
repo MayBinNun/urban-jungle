@@ -5,15 +5,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import {Link} from "react-router-dom";
 import cartSomeUp from "../../funcComponents/Cart/CartSomeUp";
-import {connect} from "react-redux";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-/*
-import {postNewOrder} from "../utils/api";
-import {Set, Reset} from "../redux/actions/cartActions";
-import {round} from "../utils/functions";
-*/
+
 
 class Checkout extends Component {
     state = {
@@ -30,18 +25,18 @@ class Checkout extends Component {
     }
 
     handleChange = e => {
-       /* this.setState({
-            [e.target.id]: e.target.value
-        });*/
+        /* this.setState({
+             [e.target.id]: e.target.value
+         });*/
     };
 
     handleNewOrder = async (event) => {
-       /* event.preventDefault();
-        let res = await postNewOrder(this.props.email, this.state, this.props.items, this.props.total, this.props.totalPrice + 3.5);
-        if (res) {
-            this.props.Reset();
-            this.props.history.push('');
-        }*/
+        /* event.preventDefault();
+         let res = await postNewOrder(this.props.email, this.state, this.props.items, this.props.total, this.props.totalPrice + 3.5);
+         if (res) {
+             this.props.Reset();
+             this.props.history.push('');
+         }*/
     };
 
     render() {
@@ -54,7 +49,7 @@ class Checkout extends Component {
                     <Card.Header>EMAIL ADDRESS</Card.Header>
                     <Card.Body>
                         <Card.Text>
-                          {/*  {this.props.email}*/}
+                            {/*  {this.props.email}*/}
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -63,7 +58,7 @@ class Checkout extends Component {
                     <Card.Header>DELIVERY ADDRESS</Card.Header>
                     <Card.Body>
                         <Card.Text>
-                          {/*  {this.props.firstName} {this.props.lastName}*/}
+                            {/*  {this.props.firstName} {this.props.lastName}*/}
                         </Card.Text>
                         <Card.Text>
                             {/*{this.props.address}*/}
@@ -87,7 +82,7 @@ class Checkout extends Component {
                             BILLING ADDRESS
                         </Card.Title>
                         <Card.Text>
-                          {/*  {this.props.firstName} {this.props.lastName}*/}
+                            {/*  {this.props.firstName} {this.props.lastName}*/}
                         </Card.Text>
                         <Card.Text>
                             {/*{this.props.address}*/}
@@ -151,10 +146,10 @@ class Checkout extends Component {
 
             <Col className='ml-lg-5 pl-lg-2 mt-4 mt-lg-0' xs={12} lg={3}>
                 <cartSomeUp handleNewOrder={this.handleNewOrder} disabled={this.validateForm()} buttonText='Place Order'
-                              /*      total={this.props.total}
-                                    totalPrice={round(this.props.totalPrice)}*/
-                                    total='1'
-                                    totalPrice="1"
+                    /*      total={this.props.total}
+                          totalPrice={round(this.props.totalPrice)}*/
+                            total='1'
+                            totalPrice="1"
                 />
             </Col>
         </Row>;
@@ -173,46 +168,17 @@ class Checkout extends Component {
 
         return (
             <div className={classes.Checkout}>
-            <React.Fragment>
-               {/* <CustomParallax title='Checkout' img={home_top} height={300}/>*/}
-                <Container className='my-auto Checkout'>
-                    {/*this.props.loggedIn*/ true ? checkout : needToLogin}
-                </Container>
-            </React.Fragment>
+                <React.Fragment>
+                    {/* <CustomParallax title='Checkout' img={home_top} height={300}/>*/}
+                    <Container className='my-auto Checkout'>
+                        {/*this.props.loggedIn*/ true ? checkout : needToLogin}
+                    </Container>
+                </React.Fragment>
             </div>
         );
     }
 }
 
 
-/*const mapStateToProps = (state) => {
-    return {
-        items: state.cart.items,
-        total: state.cart.total,
-        totalPrice: state.cart.totalPrice,
-        loggedIn: state.user.loggedIn,
-        email: state.user.email,
-        firstName: state.user.firstName,
-        lastName: state.user.lastName,
-        address: state.user.address,
-        zip: state.user.zip,
-        city: state.user.city,
-        country: state.user.country,
-        houseNum: state.user.houseNum,
-    }
-};*/
-
-/*const mapDispatchToProps = (dispatch) => {
-    return {
-        Set: (title, num) => {
-            dispatch(Set(title, num))
-        },
-        Reset: (title, num) => {
-            dispatch(Reset(title, num))
-        }
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout)*/
 
 export default Checkout;
