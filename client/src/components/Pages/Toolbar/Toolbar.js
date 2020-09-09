@@ -22,7 +22,7 @@ class Toolbar extends Component {
             <ul className={classes.NavList}>
                 <NavItem link ="/" >Home</NavItem>
                 <NavItem link ="/Menu" >Shop Plants</NavItem>
-                <NavItem link ="/" >Contact Us</NavItem>
+                <NavItem link ="/ContactUS" >Contact Us</NavItem>
             </ul>
             <ul className={classes.NavList}>
             <NavItem link ="/Login" >Login/Logout</NavItem>

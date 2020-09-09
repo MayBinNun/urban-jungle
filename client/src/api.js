@@ -64,3 +64,23 @@ export async function getTicketsInfo() {
             alert(json.msg)
         }
 }
+
+export async function contactUS(data) {
+    const res = await fetch(`/api/contactUS`, {
+        method: 'POST',
+            body: JSON.stringify(data),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+    },
+    }).then(
+        (res) => (res.json())
+    ).then((res=>{
+        if (res.status === 200){
+            alert("Message Sent.");
+        }else if(res.status === 500){
+            alert("Message failed to send.")
+        }
+    }));
+}
+
