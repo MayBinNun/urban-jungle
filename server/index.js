@@ -151,7 +151,7 @@ app.get('/api/admin/data/:email', async (req, res) => {
                     alert("couldnt load data");
                 }
                 else if (data != null) {
-                    res.status(200).send({msg: 'data sent', data});
+                    res.status(200).send({msg: 'data sent', data: data});
                 }
             })
         } else {
