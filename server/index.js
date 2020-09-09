@@ -165,24 +165,24 @@ app.get('/api/admin/data/:email', async (req, res) => {
 //Login user
 app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
     try {
-       const email = req.params.email,
+        const email = req.params.email,
             password = req.params.password,
             maxAge = req.params.remember === "true" ? (10 * 365 * 24 * 60 * 60) : (60 * 5 * 1000);
-       const isadmin = (req.params.email === 'Admin');
         client.hget('users', email, (err, data) => {
             if (err) res.redirect('/');
             else if (data != null) {
-                var obj = JSON.parse(data);
-                console.log(obj.password);
-                if (obj.password === password) {
+                let user = JSON.parse(data);
+                console.log (user.password);
+                if (user.password === password) {
                     const token = jwt.sign({email}, SECRET);
                     res.cookie('token_mama', token, {maxAge: maxAge});
-                    res.status(200).send({msg: `The user ${email}, logged in succesfully...`, success:true, isAdmin:isadmin});
-                } else {
-                    res.status(500).send({msg: `Wrong password`, success:false} );
+                    res.status(200).send({msg: `The user ${email},signed in succesfully...`});
+                }
+                else {
+                    res.status(500).send({msg: `inncocrect password`});
                 }
             } else {
-                res.status(500).send({msg: `Wrong email adress`, success:false});
+                res.status(500).send({msg: `couldnt log in.`});
             }
         });
     } catch (e) {
@@ -203,42 +203,39 @@ app.post('/api/user/logout', async (req, res) => {
 //Signup new user
 app.post('/api/user/signup', async (req, res) => {
     try {
-        let email = req.body.password;
+        let email = req.body.email;
         let obj = {
             password: req.body.password, address: req.body.address, houseNumber: req.body.houseNum, city: capitalize(req.body.city), zipCode: req.body.zip, firstName: capitalize(req.body.firstName),
             lastName: capitalize(req.body.lastName), country: req.body.country, orders: {}, currentItems: {}
         }
         client.hget('users', email, (err, data) => {
-            if (err) res.redirect('/');
+            if (err)  res.redirect('/');
             else if (data != null) {
-                res.status(500).send({msg: `The user ${email}, is already signed up...`});
+                return res.status(500).send({msg: `The user ${email}, is already signed up...`});
             } else {
                 client.hmset('users', email, JSON.stringify(obj));
-                res.status(200).send({msg: `The user ${email}, signed up succesfully...`});
+                return res.status(200).send({msg: `The user ${email}, signed up succesfully...`});
             }
         });
-        const token = jwt.sign({email}, SECRET);
-        res.cookie('token_mama', token, {maxAge: 60 * 5 * 1000});
-        res.status(200).send({msg: 'Signup successful'});
     } catch (e) {
-        res.status(500).send({msg: e.message});
+        return res.status(500).send({msg: e.message});
     }
 });
 
 //Get all tickets
 app.get('/api/tickets/get', async (req, res) => {
     try {
-    client.hgetall('tickets',function(err,res) {
-        if (err){
-            alert("couldnt load data");
-        }
-        else{
-            res.status(200).send({msg: 'tickets:', data: res});
-        }
-    });
-} catch (e) {
-    res.status(500).send({msg: e.message});
-}
+        client.hgetall('tickets',function(err,res) {
+            if (err){
+                alert("couldnt load data");
+            }
+            else{
+                res.status(200).send({msg: 'tickets:', data: res});
+            }
+        });
+    } catch (e) {
+        res.status(500).send({msg: e.message});
+    }
 });
 
 
@@ -342,9 +339,9 @@ transporter.verify((error, success) => {
 //send contactUS us message
 app.get('/api/contactUS', async (req, res) => {
     const name = req.body.name,
-     email = req.body.email,
-     message = req.body.message,
-     content = `name: ${name} \n email: ${email} \n message: ${message} `
+        email = req.body.email,
+        message = req.body.message,
+        content = `name: ${name} \n email: ${email} \n message: ${message} `
 
     let mail = {
         from: name,
@@ -357,7 +354,7 @@ app.get('/api/contactUS', async (req, res) => {
         if (err) { res.redirect('/');
         } else {
             res.status(200).send({msg: `Massage sent succesfullyr`});
-            }
+        }
     });
 });
 

@@ -21,7 +21,7 @@ class Login extends Component {
     };
 
     validateForm() {
-        return false;
+        return false   ;
         // TODO: VALIDATE
         //   return !(this.state.email.length > 0 && this.state.password.length > 0);
     }
@@ -41,7 +41,7 @@ class Login extends Component {
 
         e.preventDefault();
         let res = await getSignin(this.state.email.toLowerCase(), this.state.password, this.state.remember);
-        res.data.isAdmin ? this.props.setLoggedin(true) : this.props.setLoggedin(false);
+       // res.data.isAdmin ? this.props.setLoggedin(true) : this.props.setLoggedin(false);
 
 
         /*if (res.success) {

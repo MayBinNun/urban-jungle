@@ -43,7 +43,10 @@ class Signup extends Component {
         event.preventDefault();
         await this.setState({email: this.state.email.toLowerCase()});
         let res = await postSignup(this.state);
-
+        console.log(res);
+        if (res) {
+            // this.props.history.push('');
+        }
     };
 
     render() {
