@@ -151,7 +151,7 @@ app.get('/api/admin/data/:email', async (req, res) => {
                     alert("couldnt load data");
                 }
                 else if (data != null) {
-                    res.status(200).send({msg: 'data sent', data: datΩa});
+                    res.status(200).send({msg: 'data sent', data: data});
                 }
             })
         } else {
@@ -225,14 +225,30 @@ app.post('/api/user/signup', async (req, res) => {
 //Get all tickets
 app.get('/api/tickets/get', async (req, res) => {
     try {
-    client.hgetall('tickets',function(err,res) {
-        if (err){
-            alert("couldnt load data");
+        const obj1 = {
+            "id": 1,
+            "url": "https://cdn11.bigcommerce.com/s-oqm1pc/images/stencil/360x360/products/1158/8243/sea_of_pearls__64146.1555712278.jpg?c=2",
+            "price": 10,
+            "name":"succulent",
+            "description":"lots of sun, lots of love"
         }
-        else{
-            res.status(200).send({msg: 'tickets:', data: res});
+        const obj2 = {
+            "id": 2,
+            "url": "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1568042845-Cactus_mix_yellow_2048x.jpg?crop=0.838xw:0.838xh;0.0705xw,0.122xh",
+            "price": 10,
+            "name":"Cactus",
+            "description":"lots of sun, lots of love"
         }
-    });
+        client.hmset('tickets', JSON.stringify(obj1));
+        client.hmset('tickets', JSON.stringify(obj2));
+        client.hgetall('users', (err,data) => {
+            if (err){
+                alert("couldnt load data");
+            }
+            else if (data != null) {
+                res.status(200).send({msg: 'data sent', data: data});
+            }
+        })
 } catch (e) {
     res.status(500).send({msg: e.message});
 }

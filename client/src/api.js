@@ -41,7 +41,7 @@ export async function getAdminData(email, loggedIn) {
 export async function insertTicket(data) {
     let res = await fetch('/api/ticket/add', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: data,
         headers: {
             'Content-Type': 'application/json'
         }
