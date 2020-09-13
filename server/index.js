@@ -239,9 +239,9 @@ app.get('/api/tickets/get', async (req, res) => {
             "name":"Cactus",
             "description":"lots of sun, lots of love"
         }
-        client.hmset('tickets', JSON.stringify(obj1));
-        client.hmset('tickets', JSON.stringify(obj2));
-        client.hgetall('users', (err,data) => {
+        client.hmset('tickets',"1", JSON.stringify(obj1));
+        client.hmset('tickets',"2", JSON.stringify(obj2));
+        client.hgetall('tickets', (err,data) => {
             if (err){
                 alert("couldnt load data");
             }

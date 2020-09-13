@@ -15,7 +15,7 @@ import {getAdminData} from "../../../api";
 class PlantMenu extends Component {
 
     state = {
-        cards: []
+        cards: {}
     };
 
     async componentDidMount() {
@@ -44,15 +44,14 @@ class PlantMenu extends Component {
 
         }*/
         debugger
+        let items = this.state.cards;
 
-        const items = [...this.state.cards];
-        debugger
-        return (
-            <Container className='pb-4' style={{background: 'dark'}}>
+        return ( <div></div>
+/*            <Container className='pb-4' style={{background: 'dark'}}>
                 <div className={classes.PlantItemList}>
-                    {items.map((item) => <PlantItem item={item} addToCart={this.props.addToCart}/>)}
+                        {items.map((item) => <PlantItem item={item} addToCart={this.props.addToCart}/>)}
                 </div>
-            </Container>
+            </Container>*/
         )
     }
 
