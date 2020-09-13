@@ -12,26 +12,25 @@ import {FaShoppingCart} from "react-icons/fa";
 
 class Toolbar extends Component {
 
-    state = {
-        numOfItems: 0,
-    };
 
-    render(){
-        return(
-        <header className={classes.Toolbar}>
-            <ul className={classes.NavList}>
-                <NavItem link ="/" >Home</NavItem>
-                <NavItem link ="/Menu" >Shop Plants</NavItem>
-                <NavItem link ="/ContactUS" >Contact Us</NavItem>
-            </ul>
-            <ul className={classes.NavList}>
-            <NavItem link ="/Login" >Login/Logout</NavItem>
-            {this.props.isAdmin && <NavItem link ="/Admin" >Admin</NavItem>}
-            {this.props.isLoggedIn && <ShoppingCartBadge link="/Checkout" numOfItems='0'/>}
-            </ul>
-        </header>);
+    render() {
+        return (
+            <header className={classes.Toolbar}>
+                <ul className={classes.NavList}>
+                    <NavItem link="/">Home</NavItem>
+                    <NavItem link="/readme">Read Me</NavItem>
+                    {this.props.isLoggedIn &&<NavItem link="/Menu">Shop Plants</NavItem>}
+                    {this.props.isLoggedIn && <NavItem link="/ContactUS">Contact Us</NavItem>}
+                </ul>
+                <ul className={classes.NavList}>
+                    <NavItem link="/Login">Login/SignUp</NavItem>
+                    {this.props.isAdmin && <NavItem link="/Admin">Admin</NavItem>}
+                    {this.props.isLoggedIn &&
+                    <ShoppingCartBadge link="/Checkout" selectedProducts={this.props.selectedProducts}
+                                       totalProducts={this.props.totalProducts}/>}
+                </ul>
+            </header>);
     }
-
 
 
 }

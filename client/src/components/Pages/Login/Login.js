@@ -9,10 +9,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import {getSignin} from "../../../api";
 
 
-/*import {userLogin} from "../redux/actions/userActions";
-import {getLogin} from "../utils/api";
-import {Set, Reset} from "../redux/actions/cartActions";*/
-
 class Login extends Component {
     state = {
         email: '',
@@ -21,9 +17,7 @@ class Login extends Component {
     };
 
     validateForm() {
-        return false   ;
-        // TODO: VALIDATE
-        //   return !(this.state.email.length > 0 && this.state.password.length > 0);
+        return !(this.state.email.length > 0 && this.state.password.length > 0);
     }
 
     handleChange = e => {
@@ -37,17 +31,15 @@ class Login extends Component {
     };
 
     handleSubmit = async (e) => {
-
-
         e.preventDefault();
+        const isAdmin = this.state.email === "admin@com";
         let res = await getSignin(this.state.email.toLowerCase(), this.state.password, this.state.remember);
-        console.log(res);
-       // res.data.isAdmin ? this.props.setLoggedin(true) : this.props.setLoggedin(false);
-
-
-        /*if (res.success) {
-            res.data.isAdmin ? this.props.setLoggedin(true) : this.props.setLoggedin(false);
-        }*/
+        if (res != null  && res.status == '200') {
+            this.props.setLoggedin(isAdmin, res.user);
+            this.props.history.push('/');
+        } else {
+            alert("Failed to sign in...")
+        }
     };
 
     setItemsNum(items) {
@@ -82,7 +74,7 @@ class Login extends Component {
                                 <Form.Group controlId="remember">
                                     <Form.Check type="checkbox" label="Remember me" onChange={this.handleCheckbox}/>
                                 </Form.Group>
-                                <Button block variant="dark" type="submit" disabled={this.validateForm()}>
+                                <Button block variant="dark" type="submit" disabled={this.validateForm()} Link={'/Home'}>
                                     Login
                                 </Button>
                             </Form>
@@ -94,10 +86,10 @@ class Login extends Component {
                                 New Customer?
                             </h3>
                             <Link to='/Signup'>
-                                <Form.Label/>
-                                <Button block variant='warning' bsSize="large" className='mt-4'>
-                                    Signup
-                                </Button>
+                            <Form.Label/>
+                                <Button block variant='info' bsSize="large" className='mt-4'>
+                                Signup
+                            </Button>
                             </Link>
                         </Col>
                     </Row>

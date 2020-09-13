@@ -55,7 +55,7 @@ export async function insertTicket(data) {
 }
 
 export async function getTicketsInfo() {
-    debugger
+
     const res = await fetch('/api/tickets/get');
     const json = await res.json();
     if (res.status === 200) {
