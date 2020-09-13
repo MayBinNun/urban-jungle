@@ -12,5 +12,40 @@
     "price": 10,
     "name":"Cactus",
     "description":"lots of sun, lots of love"
+  },
+  {
+    "id": 3,
+    "url": "https://lafleur-flowers.com/wp-content/uploads/2020/03/03539_1SPLIT202003SPLIT10113932.jpg",
+    "price": 10,
+    "name":"Kenia Palm",
+    "description":"lots of sun, lots of love"
+  },
+  {
+    "id": 4,
+    "url": "https://images.homedepot-static.com/productImages/88665d88-975b-4407-afc6-b8a2c344b2ac/svn/nearly-natural-artificial-plants-6436-64_1000.jpg",
+    "price": 10,
+    "name":"Grapevines",
+    "description":"lots of sun, lots of love"
+  },
+  {
+    "id": 5,
+    "url": "https://rnb-plants.co.il/media/catalog/product/cache/1/image/770x770/82bb3f8e2f595f420b66a886a9932489/5/6/56-_.jpg",
+    "price": 10,
+    "name":"Passionflower",
+    "description":"lots of sun, lots of love"
+  },
+  {
+    "id": 6,
+    "url": "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1568042845-Cactus_mix_yellow_2048x.jpg?crop=0.838xw:0.838xh;0.0705xw,0.122xh",
+    "price": 10,
+    "name":"Cactus",
+    "description":"lots of sun, lots of love"
+  },
+  {
+    "id": 7,
+    "url": "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1568042845-Cactus_mix_yellow_2048x.jpg?crop=0.838xw:0.838xh;0.0705xw,0.122xh",
+    "price": 10,
+    "name":"Cactus",
+    "description":"lots of sun, lots of love"
   }
 ]

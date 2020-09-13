@@ -10,6 +10,7 @@ import React, { Component } from 'react';
 
 
 class ContactUS extends React.Component {
+
     state = {
             name: '',
             email: '',
@@ -33,15 +34,12 @@ class ContactUS extends React.Component {
         this.setState({message: event.target.value})
     }
 
-    handleSubmit( event ) {
-        event.preventDefault();
-        console.log(this.state);
-    }
 
 
-    handleNewMessage = async (event) => {
+    handleSubmit = async (event) => {
         event.preventDefault();
          let res = await contactUS(this.state);
+
     };
 
     render() {

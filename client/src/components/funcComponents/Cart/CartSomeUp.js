@@ -2,13 +2,16 @@ import React from 'react';
 import Card from "react-bootstrap/Card";
 import Image from "react-bootstrap/Image";
 import Button from "react-bootstrap/Button";
+import {Link} from "react-router-dom";
 
 
 
-function cartSomeUp (props) {
-    return(
+const cartSomeUp = (props) => {
+
+
+    return (
         <div>
-            <h4 className='text-uppercase my-auto'>Cart Totals</h4>
+            <h4 className='text-uppercase my-auto' style={{width: '13rem'}}>Cart Totals</h4>
             <Card className='mt-3'>
                 <Card.Header className='pl-2 font-weight-bold'>
                     {/* {props.total}*/} Products
@@ -18,7 +21,7 @@ function cartSomeUp (props) {
                         Products Price
                     </Card.Text>
                     <Card.Text>
-                        {/*    ${props.totalPrice}*/}
+                        {props.totalPrice} $
                     </Card.Text>
                 </Card.Body>
 
@@ -27,7 +30,7 @@ function cartSomeUp (props) {
                         Delivery
                     </Card.Text>
                     <Card.Text>
-                        {/*    ${3.50}*/}
+                        {3.50} $
                     </Card.Text>
                 </Card.Body>
 
@@ -36,22 +39,14 @@ function cartSomeUp (props) {
                         Total
                     </Card.Text>
                     <Card.Text>
-                        {/* ${props.totalPrice + 3.50}*/} 3.50
+                        ${props.totalPrice + 3.50}
                     </Card.Text>
                 </Card.Body>
                 <Card.Footer>
-                    <Button onClick={props.handleNewOrder} variant='warning' block disabled={props.disabled}>
-                        {/*{props.buttonText}*/} hey
+                    <Link to={'/PlaceOrder'}>
+                    <Button onClick={props.handleNewOrder} variant='info' block disabled={props.disabled}>Checkout
                     </Button>
-                    <hr/>
-                    <h6 className='mt-3'>
-                        WE ACCEPT:
-                        <Image className="img-thumbnail mt-1" src="https://assets.asosservices.com/asos-finance/images/marketing/single.png"
-                               alt="payment options"/>
-                    </h6>
-                    <p style={{fontSize: '0.8em'}}>
-                        Got a coupon code? Add it in the next step
-                    </p>
+                    </Link>
                 </Card.Footer>
             </Card>
 
@@ -59,7 +54,6 @@ function cartSomeUp (props) {
 
 
 }
-
 
 
 export default cartSomeUp;

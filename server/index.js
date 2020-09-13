@@ -7,16 +7,13 @@ const express = require('express'),
     cookieParser = require('cookie-parser'),
     jwt = require('jsonwebtoken'),
     rateLimit = require("express-rate-limit"),
-    readdirAsync = promisify(fs.readdir),
-    readFileAsync = promisify(fs.readFile),
-    writeFileAsync = promisify(fs.writeFile),
     creds = require('./creds'),
     nodemailer = require('nodemailer');
 
 const redis = require("redis");
 const client = redis.createClient();
 
-client.on("connect", function() {
+client.on("connect", function () {
     console.log("You are now connected to redis");
 });
 
@@ -83,7 +80,7 @@ app.post('/api/items/:email/:title/:action', async (req, res) => {
             if (err) res.redirect('/');
             else if (data != null) {
                 let obj = data;
-                if(obj.orders.name ){
+                if (obj.orders.name) {
                     const orders = JSON.parse(data.orders);
                     orders.push({
                         name: title,
@@ -146,12 +143,12 @@ app.get('/api/user/auth', async (req, res) => {
 app.get('/api/admin/data/:email', async (req, res) => {
     try {
         if (req.params.email === 'Admin') {
-            client.hgetall('users', (err,data) => {
-                if (err){
+            client.hgetall('users', (err, data) => {
+                if (err) {
                     alert("couldnt load data");
-                }
-                else if (data != null) {
-                    res.status(200).send({msg: 'data sent', data: data});
+                } else if (data != null) {
+                    const arrData = Object.keys(data).map(key => ({[key]: data[key]}));
+                    res.status(200).send({msg: 'data sent', data: arrData});
                 }
             })
         } else {
@@ -172,17 +169,16 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
             if (err) res.redirect('/');
             else if (data != null) {
                 let user = JSON.parse(data);
-                console.log (user.password);
+                console.log(user.password);
                 if (user.password === password) {
                     const token = jwt.sign({email}, SECRET);
                     res.cookie('token_mama', token, {maxAge: maxAge});
-                    res.status(200).send({msg: `The user ${email},signed in succesfully...`, success:true});
-                }
-                else {
-                    res.status(500).send({msg: `inncocrect password`, success:false});
+                    res.status(200).send({msg: `The user ${email},signed in succesfully...`, success: true});
+                } else {
+                    res.status(500).send({msg: `inncocrect password`, success: false});
                 }
             } else {
-                res.status(500).send({msg: `couldnt log in.`, success:false});
+                res.status(500).send({msg: `couldnt log in.`, success: false});
             }
         });
     } catch (e) {
@@ -190,26 +186,25 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
     }
 });
 
-//Logout user
-app.post('/api/user/logout', async (req, res) => {
-    try {
-        res.clearCookie('token_mama');
-        res.status(200).send({msg: 'Logout successful'});
-    } catch (e) {
-        res.status(500).send({msg: e.message});
-    }
-});
 
 //Signup new user
 app.post('/api/user/signup', async (req, res) => {
     try {
         let email = req.body.email;
         let obj = {
-            password: req.body.password, address: req.body.address, houseNumber: req.body.houseNum, city: capitalize(req.body.city), zipCode: req.body.zip, firstName: capitalize(req.body.firstName),
-            lastName: capitalize(req.body.lastName), country: req.body.country, orders: {}, currentItems: {}
+            password: req.body.password,
+            address: req.body.address,
+            houseNumber: req.body.houseNum,
+            city: capitalize(req.body.city),
+            zipCode: req.body.zip,
+            firstName: capitalize(req.body.firstName),
+            lastName: capitalize(req.body.lastName),
+            country: req.body.country,
+            orders: {},
+            currentItems: {}
         }
         client.hget('users', email, (err, data) => {
-            if (err)  res.redirect('/');
+            if (err) res.redirect('/');
             else if (data != null) {
                 return res.status(500).send({msg: `The user ${email}, is already signed up...`});
             } else {
@@ -225,70 +220,19 @@ app.post('/api/user/signup', async (req, res) => {
 //Get all tickets
 app.get('/api/tickets/get', async (req, res) => {
     try {
-        client.hgetall('tickets',function(err,res) {
-            if (err){
-                alert("couldnt load data");
-            }
-            else{
+        client.hgetall('tickets', function (err, res) {
+            if (res != null) {
                 res.status(200).send({msg: 'tickets:', data: res});
-            }
-        });
-    } catch (e) {
-        res.status(500).send({msg: e.message});
-    }
-});
-
-
-//Post a new order
-app.post('/api/order/new/:email', async (req, res) => {
-    try {
-        const email = req.params.email,
-            payment = req.body.payment,
-            items = req.body.items,
-            total = req.body.total,
-            totalPrice = req.body.totalPrice,
-            orderId = uniqid(),
-            date = Date.now();
-        client.hget('users', email, (err, data) => {
-            if (err) res.redirect('/');
-            else if (data != null) {
-                let obj = data;
-                if(obj.order){
-                    const orders = JSON.parse(obj.orders);
-                    orders.push({
-                        name: itemName,
-                        price: itemPrice,
-                        desc: itemDescription,
-                        image: `${req.file.filename}`
-                    })
-                    newObj.items = JSON.stringify(newArr)
-
-                }
-                const ord = {
-                    id: orderid,
-                    total: total,
-                    totalPrice: totalPrice,
-                    payment: payment,
-                    items: items,
-                    date: date
-                };
-                client.hset('users', email, { orders: JSON.stringify(ord)});
-                res.status(200).send({
-                    msg: 'Order successfully placed',
-                    data: ord,
-                    orderId: orderId,
-                    date: date
-                });
             } else {
-                res.status(500).send({msg: `Error placing order`});
+                res.status(500).send({msg: e.message});
             }
-            //  let data = await getRedisData("data");
-            data[email].currentItems = {};
         });
     } catch (e) {
         res.status(500).send({msg: e.message});
     }
 });
+
+
 
 //Insert new ticket
 app.post('/api/tickets/add', async (req, res) => {
@@ -310,21 +254,6 @@ app.post('/api/tickets/add', async (req, res) => {
     }
 });
 
-
-
-//Get gallery images (Simulates database access)
-app.get('/api/gallery', async (req, res) => {
-    try {
-        let images = await readdirAsync('./server_assets');
-        for (let i in images) {
-            let buffer = await readFileAsync('./server_assets/' + images[i], {encoding: 'base64'});
-            images[i] = {img: buffer, title: images[i], key: i};
-        }
-        res.status(200).send({images: images});
-    } catch (e) {
-        res.status(500).send({msg: e.message});
-    }
-});
 
 //connect transporter
 let transporter = nodemailer.createTransport(transport);
@@ -351,23 +280,14 @@ app.get('/api/contactUS', async (req, res) => {
     }
 
     transporter.sendMail(mail, (err, data) => {
-        if (err) { res.redirect('/');
+        if (err) {
+            res.redirect('/');
         } else {
             res.status(200).send({msg: `Massage sent succesfullyr`});
         }
     });
 });
 
-//Serves react client static files
-/*
-app.get('*', (req, res) => {
-    try {
-        res.sendFile(path.join(__dirname, 'client/build/index.html'));
-    } catch (e) {
-        res.status(500).send({msg: e.message});
-    }
-});
-*/
 
 //Private functions
 function capitalize(str) {

@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
-import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import {Link} from "react-router-dom";
-import Form from "react-bootstrap/Form";
 import "bootstrap/dist/css/bootstrap.min.css";
 import PlantItem from "../../funcComponents/Cards/PlantItem";
 import classes from './PlantMenu.module.css';
 import {getTicketsInfo} from "../../../api";
 import {cards} from "../../../data/data-export";
-import {getAdminData} from "../../../api";
 
 class PlantMenu extends Component {
 
@@ -19,7 +13,7 @@ class PlantMenu extends Component {
     };
 
     async componentDidMount() {
-         try{
+       /*  try{
              const res = await getTicketsInfo();
              const data = res.data;
              this.setState({cards: data});
@@ -27,8 +21,8 @@ class PlantMenu extends Component {
         }catch (e) {
             this.setState({cards:[]});
             alert(e);
-        }
-         /*   this.getTickets();*/
+        }*/
+       this.getTickets();
     }
 
 
@@ -43,14 +37,14 @@ class PlantMenu extends Component {
         for (const card of  this.state.cards){
 
         }*/
-        debugger
+
 
         const items = [...this.state.cards];
-        debugger
+
         return (
-            <Container className='pb-4' style={{background: 'dark'}}>
+            <Container  style={{background: 'dark'}}>
                 <div className={classes.PlantItemList}>
-                    {items.map((item) => <PlantItem item={item} addToCart={this.props.addToCart}/>)}
+                    {items.map((item) => <PlantItem item={item} isLoggedIn={this.props.isLoggedIn} addToCart={this.props.addToCart}/>)}
                 </div>
             </Container>
         )
