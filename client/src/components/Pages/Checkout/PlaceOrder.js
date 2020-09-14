@@ -19,8 +19,7 @@ class PlaceOrder extends Component {
 
 
     validateForm() {
-        //return !(this.state.expYear.length > 0 && this.state.expMonth.length > 0 && this.state.cardName.length > 0 && this.state.cardNum.length > 0 && this.state.cvv.length > 0);
-        return true;
+        return !(this.state.expYear.length > 0 && this.state.expMonth.length > 0 && this.state.cardName.length > 0 && this.state.cardNum.length > 0 && this.state.cvv.length > 0);
     }
 
     handleChange = e => {
@@ -31,12 +30,13 @@ class PlaceOrder extends Component {
 
     handleNewOrder = async (event) => {
 
-        console.log("Not yes implemented");
+        console.log("Not Implemented Yet");
     };
 
 
-    render() {
-
+    render()
+    {
+    console.log(this.props.user);
         const needToLogin =
             <div className='text-center' style={{'margin-top': '60px'}}>
                 <h2>
@@ -55,31 +55,19 @@ class PlaceOrder extends Component {
                     Details</h4>
 
                 <Card className='mt-3'>
-                    <Card.Header>EMAIL ADDRESS</Card.Header>
-                    <Card.Body>
-                        <Card.Text>
-                            {this.props.user.email}
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-
-                <Card className='mt-3'>
                     <Card.Header>DELIVERY ADDRESS</Card.Header>
                     <Card.Body>
                         <Card.Text>
-                            {/*  {this.props.firstName} {this.props.lastName}*/}
+                            Name; {this.props.user.firstName} {this.props.user.lastName}
                         </Card.Text>
                         <Card.Text>
-                            {/*{this.props.address}*/}
+                            Address: {this.props.user.address}
                         </Card.Text>
                         <Card.Text>
-                            {/*{this.props.city}*/}
+                            City: {this.props.user.city}
                         </Card.Text>
                         <Card.Text>
-                            {/*{this.props.country}*/}
-                        </Card.Text>
-                        <Card.Text>
-                            {/*{this.props.zip}*/}
+                            ZipCode: {this.props.user.zipCode}
                         </Card.Text>
                     </Card.Body>
                 </Card>
@@ -87,27 +75,7 @@ class PlaceOrder extends Component {
                 <Card className='mt-3'>
                     <Card.Header>PAYMENT</Card.Header>
                     <Card.Body>
-                        <Card.Title>
-                            BILLING ADDRESS
-                        </Card.Title>
-                        <Card.Text>
-                            {/*  {this.props.firstName} {this.props.lastName}*/}
-                        </Card.Text>
-                        <Card.Text>
-                            {/*{this.props.address}*/}
-                        </Card.Text>
-                        <Card.Text>
-                            {/*{this.props.city}*/}
-                        </Card.Text>
-                        <Card.Text>
-                            {/*{this.props.country}*/}
-                        </Card.Text>
-                        <Card.Text>
-                            {/*{this.props.zip}*/}
-                        </Card.Text>
-
                         <hr/>
-
                         <Card.Title>
                             PAYMENT TYPE
                         </Card.Title>

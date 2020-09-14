@@ -45,6 +45,32 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+/*const getRedisData = key => new Promise(async (resolve, reject) => {
+    client.get(key, (err, reply) => {
+        if (reply) {
+            console.log("Read data from Redis");
+            resolve(JSON.parse(reply));
+        } else if (err) {
+            console.log("Redis Error - " + err);
+        } else {
+            console.log("Read data from DB");
+        }
+        const data = require('./data');
+        client.set(key, JSON.stringify(data));
+        resolve(data);
+    });
+});
+
+const setRedisData = (key, data) => {
+    // flushall to clean data
+    client.set(key, JSON.stringify(data));
+    return writeFileAsync('./data.json', JSON.stringify(data));
+};
+
+app.get('/getRedisData', async (req, res) => {
+    const data = await getRedisData("data");
+    res.status(200).send(data);
+});*/
 //Update user's items in db
 app.post('/api/items/:email/:title/:action', async (req, res) => {
     try {
@@ -123,14 +149,12 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
             if (err) res.redirect('/');
             else if (data != null) {
                 let user = JSON.parse(data);
-                console.log (user.password);
                 if (user.password === password) {
                     const token = jwt.sign({email}, SECRET);
-                    res.cookie('token', token, {maxAge: maxAge});
-                    res.status(200).send({msg: `The user ${email},signed in succesfully...`, success:true});
-                }
-                else {
-                    res.status(500).send({msg: `inncocrect password`, success:false});
+                    res.cookie('token_mama', token, {maxAge: maxAge});
+                    res.status(200).send({msg: `The user ${email},signed in succesfully...`, success: true});
+                } else {
+                    res.status(500).send({msg: `inncocrect password`, success: false});
                 }
             } else {
                 res.status(500).send({msg: `couldnt log in.`, success:false});
@@ -239,6 +263,8 @@ app.post('/api/order/new/:email', async (req, res) => {
     }
 });
 
+
+
 //Insert new ticket
 app.post('/api/tickets/add', async (req, res) => {
     try {
@@ -258,7 +284,6 @@ app.post('/api/tickets/add', async (req, res) => {
         res.status(500).send({msg: e.message});
     }
 });
-
 
 
 //connect transporter
