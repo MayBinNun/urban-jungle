@@ -45,32 +45,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
-/*const getRedisData = key => new Promise(async (resolve, reject) => {
-    client.get(key, (err, reply) => {
-        if (reply) {
-            console.log("Read data from Redis");
-            resolve(JSON.parse(reply));
-        } else if (err) {
-            console.log("Redis Error - " + err);
-        } else {
-            console.log("Read data from DB");
-        }
-        const data = require('./data');
-        client.set(key, JSON.stringify(data));
-        resolve(data);
-    });
-});
-
-const setRedisData = (key, data) => {
-    // flushall to clean data
-    client.set(key, JSON.stringify(data));
-    return writeFileAsync('./data.json', JSON.stringify(data));
-};
-
-app.get('/getRedisData', async (req, res) => {
-    const data = await getRedisData("data");
-    res.status(200).send(data);
-});*/
 //Update user's items in db
 app.post('/api/items/:email/:title/:action', async (req, res) => {
     try {
@@ -83,7 +57,7 @@ app.post('/api/items/:email/:title/:action', async (req, res) => {
             if (err) res.redirect('/');
             else if (data != null) {
                 let obj = data;
-                if(obj.orders.name ){
+                if (obj.orders.name) {
                     const orders = JSON.parse(data.orders);
                     orders.push({
                         name: title,
@@ -92,28 +66,6 @@ app.post('/api/items/:email/:title/:action', async (req, res) => {
                     obj.orders = JSON.stringify(orders);
                     client.hmset(email, obj);
                 }
-                switch (action) {
-                    case 'ADD':
-                        if (data[email].currentItems[title]) {
-                            data[email].currentItems[title]++;
-                        } else {
-                            data[email].currentItems[title] = 1;
-                        }
-                        break;
-                    case 'SUB':
-                        if (data[email].currentItems[title] > 1) {
-                            data[email].currentItems[title]--;
-                        } else {
-                            delete data[email].currentItems[title];
-                        }
-                        break;
-                    case 'ZERO':
-                        delete data[email].currentItems[title];
-                        break;
-                }
-                res.status(200).send({msg: 'Items we\'re updated'});
-            } else {
-                res.status(500).send({msg: `Couldnt find user orders`});
             }
         });
     } catch (e) {
@@ -125,11 +77,10 @@ app.post('/api/items/:email/:title/:action', async (req, res) => {
 //Authenticate user with cookie on lunching the app and getting user's data
 app.get('/api/user/auth', async (req, res) => {
     try {
-        const data = await getRedisData("data");
-        if (req.cookies && req.cookies.token_mama) {
-            const token = req.cookies.token_mama,
+        if (req.cookies && req.cookies.token) {
+            const token = req.cookies.token,
                 decoded = jwt.verify(token, SECRET);
-            if (data[decoded.email]) {
+            if (true) {
                 res.status(200).send({msg: 'Auth successful', data: data[decoded.email]});
             } else {
                 res.status(500).send({msg: 'Auth failed... there is no user with this token'});
@@ -175,7 +126,7 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
                 console.log (user.password);
                 if (user.password === password) {
                     const token = jwt.sign({email}, SECRET);
-                    res.cookie('token_mama', token, {maxAge: maxAge});
+                    res.cookie('token', token, {maxAge: maxAge});
                     res.status(200).send({msg: `The user ${email},signed in succesfully...`, success:true});
                 }
                 else {
@@ -193,7 +144,7 @@ app.get('/api/user/login/:email/:password/:remember', async (req, res) => {
 //Logout user
 app.post('/api/user/logout', async (req, res) => {
     try {
-        res.clearCookie('token_mama');
+        res.clearCookie('token');
         res.status(200).send({msg: 'Logout successful'});
     } catch (e) {
         res.status(500).send({msg: e.message});
@@ -225,23 +176,7 @@ app.post('/api/user/signup', async (req, res) => {
 //Get all tickets
 app.get('/api/tickets/get', async (req, res) => {
     try {
-        const obj1 = {
-            "id": 1,
-            "url": "https://cdn11.bigcommerce.com/s-oqm1pc/images/stencil/360x360/products/1158/8243/sea_of_pearls__64146.1555712278.jpg?c=2",
-            "price": 10,
-            "name":"succulent",
-            "description":"lots of sun, lots of love"
-        }
-        const obj2 = {
-            "id": 2,
-            "url": "https://hips.hearstapps.com/vader-prod.s3.amazonaws.com/1568042845-Cactus_mix_yellow_2048x.jpg?crop=0.838xw:0.838xh;0.0705xw,0.122xh",
-            "price": 10,
-            "name":"Cactus",
-            "description":"lots of sun, lots of love"
-        }
-        client.hmset('tickets', JSON.stringify(obj1));
-        client.hmset('tickets', JSON.stringify(obj2));
-        client.hgetall('users', (err,data) => {
+        client.hgetall('tickets', (err,data) => {
             if (err){
                 alert("couldnt load data");
             }
@@ -298,8 +233,6 @@ app.post('/api/order/new/:email', async (req, res) => {
             } else {
                 res.status(500).send({msg: `Error placing order`});
             }
-            //  let data = await getRedisData("data");
-            data[email].currentItems = {};
         });
     } catch (e) {
         res.status(500).send({msg: e.message});
@@ -327,20 +260,6 @@ app.post('/api/tickets/add', async (req, res) => {
 });
 
 
-
-//Get gallery images (Simulates database access)
-app.get('/api/gallery', async (req, res) => {
-    try {
-        let images = await readdirAsync('./server_assets');
-        for (let i in images) {
-            let buffer = await readFileAsync('./server_assets/' + images[i], {encoding: 'base64'});
-            images[i] = {img: buffer, title: images[i], key: i};
-        }
-        res.status(200).send({images: images});
-    } catch (e) {
-        res.status(500).send({msg: e.message});
-    }
-});
 
 //connect transporter
 let transporter = nodemailer.createTransport(transport);
@@ -374,23 +293,6 @@ app.get('/api/contactUS', async (req, res) => {
     });
 });
 
-//Serves react client static files
-/*
-app.get('*', (req, res) => {
-    try {
-        res.sendFile(path.join(__dirname, 'client/build/index.html'));
-    } catch (e) {
-        res.status(500).send({msg: e.message});
-    }
-});
-*/
-
-//Private functions
-function capitalize(str) {
-    return str.replace(/\w\S*/g, function (txt) {
-        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-}
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
