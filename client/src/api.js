@@ -17,7 +17,8 @@ export async function postSignup(data) {
 
 export async function getSignin(email, password, remember){
     let res = await fetch(`/api/user/login/${email}/${password}/${remember}`);
-    if (res.status === 200) {
+    res = await res.json()
+    if (res && res.success) {
         return res;
     } else {
         alert(res.msg)

@@ -34,11 +34,13 @@ class Login extends Component {
         e.preventDefault();
         const isAdmin = this.state.email === "admin@com";
         let res = await getSignin(this.state.email.toLowerCase(), this.state.password, this.state.remember);
-        if (res != null  && res.status == '200') {
+        if (res != null  && res.success) {
+            console.log(res);
             this.props.setLoggedin(isAdmin, res.user);
             this.props.history.push('/');
+            console.log(res.user);
         } else {
-            alert("Failed to sign in...")
+            this.setState({email:'', password:''});
         }
     };
 
@@ -74,7 +76,7 @@ class Login extends Component {
                                 <Form.Group controlId="remember">
                                     <Form.Check type="checkbox" label="Remember me" onChange={this.handleCheckbox}/>
                                 </Form.Group>
-                                <Button block variant="dark" type="submit" disabled={this.validateForm()} Link={'/Home'}>
+                                <Button block variant="dark" type="submit" disabled={this.validateForm()} link={'/Home'}>
                                     Login
                                 </Button>
                             </Form>
@@ -87,7 +89,7 @@ class Login extends Component {
                             </h3>
                             <Link to='/Signup'>
                             <Form.Label/>
-                                <Button block variant='info' bsSize="large" className='mt-4'>
+                                <Button block variant='info' className='mt-4'>
                                 Signup
                             </Button>
                             </Link>
